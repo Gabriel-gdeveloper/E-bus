@@ -1,6 +1,9 @@
 node_modules/
 dist/
 generated/
+.agents/
+.claude/
+.windsurf/
 
 .env
 .env.*
@@ -33,4 +36,5 @@ desktop.ini
 !.vscode/settings.json
 !.vscode/launch.json
 !.vscode/tasks.json
+
 
