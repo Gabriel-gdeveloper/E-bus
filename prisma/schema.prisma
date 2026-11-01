@@ -7,9 +7,19 @@ datasource db {
   provider = "postgresql"
 }
 
-model user{
+model Pessoa{
   id Int @id @default(autoincrement())
   name String
   email String @unique
   password String 
+
+  motorista Motorista?
 } 
+
+ model Motorista {
+   id Int @id @default(autoincrement())
+   identificacao String @unique
+   telefone String?
+   pessoa_id Int @unique
+   pessoa   Pessoa   @relation(fields: [pessoa_id], references: [id]) 
+ }
