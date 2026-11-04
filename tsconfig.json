@@ -1,5 +1,6 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
+
   "compilerOptions": {
     "target": "ES2022",
     "module": "commonjs",
@@ -8,7 +9,6 @@
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports":true,
-    
     
     // File Layout
     // "rootDir": "./src",
@@ -49,6 +49,9 @@
 
     
   },
+
+  "include": ["src/**/*.ts"],
+  
     "exclude": [
     "node_modules",
     "prisma7.config.ts",
