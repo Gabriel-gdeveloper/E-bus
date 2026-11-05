@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { cadastrarMotorista } from "../services/motorista.service";
+import { cadastrarMotorista,buscarMotoristas } from "../services/motorista.service";
 import { AppError } from "../utils/appError";
 
 
@@ -37,4 +37,13 @@ export async function cadastrarMotoristaController(
     return res.status(201).json({
         message: "Motorista cadastrado com sucesso."
     });
+}
+
+export async function listarMotoristasController(
+    req: Request,
+    res: Response
+) {
+    const motoristas = await buscarMotoristas();
+
+    return res.status(200).json(motoristas);
 }

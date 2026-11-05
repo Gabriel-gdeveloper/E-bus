@@ -1,7 +1,19 @@
 import { prisma } from "../lib/prisma";
 
 export async function listarMotoristas() {
-    return await prisma.motorista.findMany();
+    return await prisma.motorista.findMany({
+        select: {
+            id: true,
+            identificacao: true,
+            telefone: true,
+            pessoa: {
+                select: {
+                    name: true,
+                    email: true
+                }
+            }
+        }
+    });
 }
 
 interface CriarMotoristaData {
@@ -14,9 +26,10 @@ interface CriarMotoristaData {
 export async function criarMotorista(data: CriarMotoristaData) {
     return await prisma.pessoa.create({
         data: {
-            name: data.name.trim(),
+            name: data.name,
             email: data.email,
             password: data.passwordHash,
+            tipo: "MOTORISTA",
             motorista: {
                 create: {
                     identificacao: data.identificacao,

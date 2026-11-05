@@ -4,7 +4,10 @@ import bcrypt from "bcryptjs";
 export async function gerarHashSenha(senha: string) {
     return await bcrypt.hash(senha, 10);
 }
-import { criarMotorista } from "../repositories/motorista.repository"
+import {
+    criarMotorista,
+    listarMotoristas
+} from "../repositories/motorista.repository"
 
 interface CadastrarMotoristaInput {
     name: string;
@@ -20,7 +23,7 @@ export async function cadastrarMotorista(
 ) {
     if (data.name.trim().length === 0) {
         throw new AppError("O nome do motorista é obrigatório.", 400);
-    }    
+    }
 
     const email = data.email.trim().toLowerCase();
     if (!email.includes("@") || !email.includes(".")) {
@@ -39,7 +42,7 @@ export async function cadastrarMotorista(
     const passwordHash = await gerarHashSenha(data.password);
 
     return await criarMotorista({
-        name: data.name,
+        name: data.name.trim(),
         email: email,
         passwordHash: passwordHash,
         identificacao: data.identificacao.trim(),
@@ -48,3 +51,7 @@ export async function cadastrarMotorista(
             : {})
     });
 }   
+export async function buscarMotoristas() {
+    const motoristas = await listarMotoristas();
+    return motoristas;
+}

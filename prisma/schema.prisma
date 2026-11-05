@@ -7,19 +7,44 @@ datasource db {
   provider = "postgresql"
 }
 
-model Pessoa{
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  password String 
+model Pessoa {
+  id       Int        @id @default(autoincrement())
+  name     String
+  email    String     @unique
+  password String
+  tipo     TipoPessoa
 
-  motorista Motorista?
-} 
+  motorista     Motorista?
+  administrador Administrador?
+  responsavel   Responsavel?
+}
 
- model Motorista {
-   id Int @id @default(autoincrement())
-   identificacao String @unique
-   telefone String?
-   pessoa_id Int @unique
-   pessoa   Pessoa   @relation(fields: [pessoa_id], references: [id]) 
- }
+model Motorista {
+  id            Int     @id @default(autoincrement())
+  identificacao String  @unique
+  telefone      String?
+  pessoa_id     Int     @unique
+  pessoa        Pessoa  @relation(fields: [pessoa_id], references: [id])
+}
+
+enum TipoPessoa {
+  ADMINISTRADOR
+  MOTORISTA
+  ALUNO
+  RESPONSAVEL
+}
+
+model Administrador {
+  id        Int @id @default(autoincrement())
+  pessoa_id Int @unique
+
+  pessoa Pessoa @relation(fields: [pessoa_id], references: [id])
+}
+
+model Responsavel {
+  id        Int     @id @default(autoincrement())
+  telefone  String?
+  pessoa_id Int     @unique
+
+  pessoa Pessoa @relation(fields: [pessoa_id], references: [id])
+}
