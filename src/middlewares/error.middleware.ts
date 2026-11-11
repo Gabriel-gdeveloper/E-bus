@@ -1,6 +1,5 @@
 import type { ErrorRequestHandler } from "express";
 import { AppError } from "../utils/appError";
-import { Prisma } from "../generated/prisma/client.js";
 
 export const errorMiddleware: ErrorRequestHandler = (
     err,
@@ -15,15 +14,17 @@ export const errorMiddleware: ErrorRequestHandler = (
         return;
     }
 
-    if (
-        err instanceof Prisma.PrismaClientKnownRequestError &&
-        err.code === "P2002"
-    ) {
-        res.status(409).json({
-            message: "Já existe um registro com esses dados únicos."
-        });
-        return;
-    }
+  if (
+    typeof err === "object" &&
+    err !== null &&
+    "code" in err &&
+    err.code === "P2002"
+) {
+    res.status(409).json({
+        message: "Já existe um registro com esses dados únicos."
+    });
+    return;
+}
 
 
     console.error(err);

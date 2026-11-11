@@ -1,9 +1,6 @@
 import { AppError } from "../utils/appError";
-import bcrypt from "bcryptjs";
+import { gerarHashSenha } from "../utils/senha";
 
-export async function gerarHashSenha(senha: string) {
-    return await bcrypt.hash(senha, 10);
-}
 import {
     criarMotorista,
     listarMotoristas
