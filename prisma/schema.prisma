@@ -17,7 +17,20 @@ model Pessoa {
   motorista     Motorista?
   administrador Administrador?
   responsavel   Responsavel?
+  aluno Aluno?
 }
+
+model Aluno {
+  id Int @id @default(autoincrement())
+  matricula String @unique
+
+  pessoa_id Int @unique
+  pessoa Pessoa @relation(fields: [pessoa_id], references: [id])
+
+  cidade_id Int 
+  cidade Cidade @relation(fields: [cidade_id], references: [id])
+}
+
 
 model Motorista {
   id            Int     @id @default(autoincrement())
@@ -25,13 +38,6 @@ model Motorista {
   telefone      String?
   pessoa_id     Int     @unique
   pessoa        Pessoa  @relation(fields: [pessoa_id], references: [id])
-}
-
-enum TipoPessoa {
-  ADMINISTRADOR
-  MOTORISTA
-  ALUNO
-  RESPONSAVEL
 }
 
 model Administrador {
@@ -47,4 +53,20 @@ model Responsavel {
   pessoa_id Int     @unique
 
   pessoa Pessoa @relation(fields: [pessoa_id], references: [id])
+}
+
+enum TipoPessoa {
+  ADMINISTRADOR
+  MOTORISTA
+  ALUNO
+  RESPONSAVEL
+}
+
+model Cidade {
+  id Int @id @default(autoincrement())
+  nome String
+  uf String
+  alunos Aluno[]
+
+  @@unique([nome,uf])
 }

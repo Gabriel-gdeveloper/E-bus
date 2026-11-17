@@ -4,7 +4,7 @@ export async function listarResponsaveis() {
     return await prisma.responsavel.findMany({
        select: {
             id: true,
-            telefone: true,
+            telefone: true, 
             pessoa: {
                 select: {
                     name: true,
@@ -14,8 +14,6 @@ export async function listarResponsaveis() {
        }
     });
 }
-
-
 interface CriarResponsavelData {
     name: string;
     email: string;
