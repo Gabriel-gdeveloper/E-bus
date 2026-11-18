@@ -29,6 +29,8 @@ model Aluno {
 
   cidade_id Int 
   cidade Cidade @relation(fields: [cidade_id], references: [id])
+
+  responsaveis Responsavel[]
 }
 
 
@@ -53,6 +55,8 @@ model Responsavel {
   pessoa_id Int     @unique
 
   pessoa Pessoa @relation(fields: [pessoa_id], references: [id])
+
+  alunos Aluno[]
 }
 
 enum TipoPessoa {

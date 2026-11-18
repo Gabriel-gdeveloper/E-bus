@@ -1,7 +1,15 @@
-import { criarAluno, listarAlunos } from "../repositories/aluno.repository";
 import { AppError } from "../utils/appError";
 import { gerarHashSenha } from "../utils/senha";
 import { prisma } from "../lib/prisma";
+import {
+    criarAluno,
+    listarAlunos,
+    buscarAlunoPorId,
+    buscarResponsavelPorId,
+    vincularResponsavel,
+    listarResponsaveisDoAluno
+} from "../repositories/aluno.repository";
+import { listarResponsaveis } from "../repositories/responsavel.repository";
 
 interface CadastrarAlunoInput {
     name: string;
@@ -57,4 +65,58 @@ export async function cadastrarAluno(data: CadastrarAlunoInput) {
 
 export async function buscarAlunos() {
     return await listarAlunos();
+}
+
+export async function vincularResponsavelService(
+    alunoId: number,
+    responsavelId: number
+) {
+    if (
+        !Number.isInteger(alunoId) ||
+        alunoId <= 0 ||
+        !Number.isInteger(responsavelId) ||
+        responsavelId <= 0
+    ) {
+        throw new AppError("IDs inválidos.", 400);
+    }
+
+    const aluno = await buscarAlunoPorId(alunoId);
+
+    if (!aluno) {
+        throw new AppError("Aluno não encontrado.", 404);
+    }
+
+    const responsavel = await buscarResponsavelPorId(responsavelId);
+
+    if (!responsavel) {
+        throw new AppError("Responsável não encontrado.", 404);
+    }
+     const jaVinculado = aluno.responsaveis.some(
+        responsavel => responsavel.id === responsavelId
+    );
+
+    if (jaVinculado) {
+        throw new AppError(
+            "Este responsável já está vinculado ao aluno.",
+            409
+        );
+    }
+    return await vincularResponsavel(alunoId, responsavelId);
+}
+
+
+export async function buscarResponsaveisDoAlunoService(
+    alunoId: number
+) {
+    if (!Number.isInteger(alunoId) || alunoId <= 0) {
+        throw new AppError("ID do aluno inválido.", 400);
+    }
+
+    const aluno = await listarResponsaveisDoAluno(alunoId);
+
+    if (!aluno) {
+        throw new AppError("Aluno não encontrado.", 404);
+    }
+
+    return aluno;
 }
